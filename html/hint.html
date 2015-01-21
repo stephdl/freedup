@@ -1,0 +1,145 @@
+<?XML version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <HEAD>
+    <TITLE>Freedup Download</TITLE>
+    <META HTTP-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <META NAME="KEYWORDS" content="Freedup, systems management, tool, link, download" />
+    <META HTTP-EQUIV="expires" content="Tue, 30 Aug 2007 19:00:00 CET" />
+    <LINK REL="stylesheet" type="text/css" href="freedup.css" />
+</HEAD>
+<BODY BGCOLOR="#DDDDFF">
+<P>
+<H2> Hints on what FreeDup (seems to) lack </H2>
+<P>
+<OL>
+<LI><B>Excess Mode</B><BR>
+  <A HREF="http://freshmeat.net/projects/duff">Duff</A> provides an "excess mode" that shows
+  clusters of identical files where exactly one is missing. The intention is to remove all
+  duplicates and keep the one that is not shown. The man page of duff suggests to use:<BR>
+  <PRE>duff -er . | xargs rm</PRE>
+  In case you want to do the same with FreeDup, your line should read
+  <PRE>freedup -in . | awk '{if(NF!=0)print x;x=$0}' | xargs rm</PRE>
+  Please be aware that two such concurrently active jobs might delete files, since qsort() of 
+  the OS does not provide a kind of sorting that guarantees to keep two identical files
+  in their original order.
+	<BR><BR>
+<LI><B>Convert Symbolic Links To Real Files</B><BR>
+  <A HREF="http://freshmeat.net/projects/duff">Duff</A> also provides a "reverse mode" that
+  converts symbolically linked files back to plain files, which are not linked 
+  to their original source. If this is generally desired you may want to use:
+  <PRE>find test -type l -exec cp {} {}.tmp$$ \; -exec mv {}.tmp$$ {} \;</PRE>
+	<BR>
+<LI><B>Convert Symbolic Links To Hard Links</B><BR>
+  If you wish to replace symbolic links by hard links, I may provide you two
+  alternatives. One is using a shell script <A HREF="soft2hard.sh">soft2hard</A>
+  The other uses <A HREF="symharden.c">my own C code</A> of a command 
+  <A HREF="symharden">symharden</A>, which accepts a single symbolic link that
+  will be replaced by a hard link if possible. It will fail with non-zero
+  return code in all other cases. Please be aware that the usual restriction
+  for links apply, i.e. no cross-device links. Use this line to do it for a full tree:
+  <PRE>find test -type l -exec symharden {} \;</PRE>
+	<BR>
+<LI><B>Hard-Linking directories</B><BR>
+  some operating systems support linking of directories on some file systems with the <TT>link</TT>
+  (not possible with <TT>ln</TT>) command. 
+  Since the testing environment does not provide such functionality, there is no option for it. 
+  On the other hand, it would probably not significantly change the file system size.
+	<BR><BR>
+<LI><B>Exclude Directories</B><BR>
+  FreeDup does not really provide to exclude directories by full or partial path name.
+  But since you may prepare any file list, you are able to do this as well. For me
+  mostly two situations apply:
+  <UL>
+  <LI>Sometimes I do not want to include all filesystems within a file tree.
+    <PRE>freedup -o '-xdev' test  test/mount</PRE>
+  <LI>If there is no specific mountpoint that I would want to exclude, but a directory name,
+    then it works well this way.
+    <PRE>find test -print | grep -v '/invalid_dir/' | freedup </PRE>
+  </UL>
+  You may easily think of other solutions following this patterns.
+	<BR><BR>
+<LI><B>Directory Modification Times</B><BR>
+  When linking files it is unavoidable to change the modification and the access time of the
+  directory the target belongs to. Carsten Schmidt reported me a case where this leads to 
+  additional (unwanted) actions. Use the -T option to make FreeDup keeping the modification
+  times of the directories. Since FreeDup avoids locking, there is a little chance for 
+  another process to modify the directory while the access date is (mis)corrected.
+        <BR>
+  NB: The full time stamp of the linked file is the one of the link source. After linking any modification
+  would affect link source and target.
+	<BR><BR>
+<LI><B>Removing empty files or directories</B><BR>
+  With Linux this a simple command line would do it for directories:
+  <PRE>find ./ -type d -empty -print0 | xargs -0 rmdir</PRE>
+  and another one for empty files
+  <PRE>find ./ -type f -empty -print0 | xargs -0 rm</PRE>
+  Both lines allow to use line feeds within the file names, since they use zero limited strings
+  (This hint is from the readme of <A HREF="http://sourceforge.net/projects/dupmerge">dupmerge</A>).
+	<BR>
+  With a non GNU-like OS this command line would do it for directories:
+  <PRE>find ./ -type d -size 0c -print | xargs rmdir</PRE>
+  and a similar one for empty files:
+  <PRE>find ./ -type f -size 0c -print | xargs rm</PRE>
+	<BR>
+<LI><B>Finding Linked files with Windows</B> <BR>
+  Kurt pointed out how hard it can be to find linked files within Windows
+  (compare: junction systeminternals). He suggests this command using cygwin:
+  <PRE>find . -type f -noleaf -links +1 -printf "%n %i %f\t%h\n" | sort | less</PRE>
+	<BR>
+</OL>
+<P>
+<H2> Hints on (previous) strange behaviour of FreeDup </H2>
+<P>
+<H3> Quality Verification </H3>
+<P>
+Starting with version 1.0-5 the binary installation provides a file called <TT>verify</TT>.
+This is partially identical to the testing routines of the source package.
+Please be aware, that you have to be root to be successful with all tasks
+since there are test files given to other users (<TT>bin.bin</TT>, except
+for cygwin: <TT>ASPNET.SYSTEM</TT>). In version 1.0-5 there is also a good
+chance that the intercative test fails, when the sorting order (which was
+not defined!) differs from my development system.
+<P>
+<H3> Hash Evaluation </H3>
+<P>
+The versions before 1.0-4 do not support an internal hash sum calculation. 
+External hash programs give you the disadvantage of speed loss, since 
+the hash sums are calculated separately (use <TT>-#</TT> to switch hashsums off). 
+The advantage is, that you may use nearly every external program 
+that generates hash sums. You have to set the paths at compile time
+or move/link the executables to where they are expected.
+<P>
+The use of external programs may cause strange effects, if they do not
+work as expected. This was the reason why the cygwin versions before 1.0-3 
+all had no hash support. Version 1.0-3 does no strict testing, but
+checks that the output format matches the format that FreeDup needs.
+On my development system (SuSE Linux 10) the output to <TT>sha1sum freedup</TT>
+reads <PRE>284abef5f109e88d8e997a8756c6fe396dade795  freedup</PRE>
+while it reads under cygwin
+<PRE>284abef5f109e88d8e997a8756c6fe396dade795 *freedup</PRE>
+<P>
+Freedup expects a 40 byte hash sum for <TT>sha1sum</TT> and
+32 alphanumeric bytes for <TT>md5sum</TT>. The use of the 
+16 bytes output from <TT>sum</TT> is not really considered helpful, but
+provided as fallback. The spaces (for cygwin the second is an asterisk)
+after the hash code are checked to be there (details are in the definition
+around the <TT>hashme[]</TT> within the source). If not, it is assumed that the hash methods
+quite certainly provide misleading results. Therefore they are disabled
+automatically. Prior to version 1.1 you see output like this if the output format does not match:
+<P>
+<PRE>
+$ freedup /home/peter/
+md5: format does not match ('/' instead of ' ')
+sum: format does not match ('i' instead of ' ')
+No working hashmethod found.
+--> Use of hash methods is disabled.
+[...]
+</PRE>
+<P>
+Starting with <A HREF="download.html">version 1.0-4, FreeDup</A> provides an 
+internal hash method as default and fallback method, 
+but allows a free choice between an internal and the external hash methods.
+<P>
+</BODY>
+</HTML>

@@ -1,0 +1,121 @@
+<?XML version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML lang="en" >
+  <HEAD>
+    <TITLE>Freedup Syntax</TITLE>
+    <META HTTP-equiv="Content-Type" content="text/html; charset=utf-8" >
+    <META NAME="KEYWORDS" content="Freedup, systems management, tool, link, download" >
+    <META HTTP-EQUIV="expires" content="Tue, 30 Aug 2007 19:00:00 CET" >
+    <LINK REL="stylesheet" type="text/css" href="freedup.css" >
+</HEAD>
+<BODY BGCOLOR="#DDDDFF">
+<P>
+<P>
+<TABLE ALIGN="LEFT" BORDER="0" STYLE="padding:20px;">
+<TR><TH COLSPAN="2" ALIGN="LEFT">
+<H2> Syntax Of <FONT STYLE="font-size:20px;">F</FONT>REE<FONT STYLE="font-size:20px;">D</FONT>UP</H2>
+</TH></TR>
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TH>freedup</TH><TH ALIGN="LEFT">[options] [&lt;tree&gt; ...]</TH></TR>
+<TR><TD WIDTH="80"></TD><TD WIDTH="600" COLSPAN="2">
+	Options are toggle switches. Their final state applies.<BR>
+	Later &lt;tree&gt; entries are linked to the earlier ones.<BR>
+	Providing no &lt;tree&gt; means to take filenames(!) from stdin.<BR>
+	When standard input is used the option -o has no effect.<BR>
+	<A HREF="download.html">FreeDup Version 1.5-3 by AN@freedup.org &copy;2007-2009.</A><BR>
+	<A HREF="http://www.saddi.com/software/sha/">Sha1 Version 1.0.4 by Allan Saddi &copy;2001-2003</A>.
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TH COLSPAN="2" ALIGN="LEFT">
+<H2>Option Categories</H2>
+</TH></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">File Comparison</TH></TR>
+<TR><TH ALIGN="LEFT">-a</TH><TD>provide compatibility to freedups by William Stearns.[=<EM>-gup</EM>]</TD></TR>
+<TR><TH ALIGN="LEFT">-d</TH><TD>requires the modification time stamps to be equal.</TD></TR>
+<TR><TH ALIGN="LEFT">-D &lt;sec&gt;</TH><TD>allow the modification time stamps to differ by not more than &lt;sec&gt; seconds.</TD></TR>
+<TR><TH ALIGN="LEFT">-f</TH><TD>requires the path-stripped file names to be equal.</TD></TR>
+<TR><TH ALIGN="LEFT">-g</TH><TD>requires groups to be equal.</TD></TR>
+<TR><TH ALIGN="LEFT">-p</TH><TD>requires file permissions to be equal.</TD></TR>
+<TR><TH ALIGN="LEFT">-P &lt;mask&gt;</TH><TD> set permission &lt;mask&gt; to an octal number, which indicates the permissions that need to be identical when comparing files.</TD></TR>
+<TR><TH ALIGN="LEFT">-u</TH><TD>requires users to be equal.</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">Comparison Style</TH></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-x &lt;style&gt;</TH><TD>where style means what kind of containers 
+	<A HREF="process.html">freedup should look for before processing,</A>
+	i.e. the calculation of hashsums and comparison.<BR>
+	<EM>mp3</EM> ignores mp3v1 and mp3v2 tags<BR>
+	<EM>mp4</EM> ignores all mpeg containers except the first sequence of <TT>mdat</TT> ones<BR>
+	<EM>mpc</EM> ignores mouse pack trailing tags<BR>
+	<EM>jpg</EM> ignores jpeg header tags (including quantizazion)<BR>
+	<EM>ogg</EM> ignores OggS header and short trailing tags<BR>
+	<EM>auto</EM> selects one of above methods when appropriate<BR>
+	</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">Hash Functions</TH></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-t &lt;type&gt;</TH><TD> selects an external hash method. Valid choices are sha512, sha384, sha256, sha224, sha1, md5, sum . External hash functions are not supported with comparison styles.</TD></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-# &lt;level&gt;</TH><TD>with level one of 0, 1, or 2. Controls the way that hash functions are used. Independently all files are compared byte by byte. Default is 2, which results in a fast hash function calculation during byte-by-byte comparision. This needs some more memory and the same or less time than level 0, which does not evaluate any hash values. Level 1 is needed to evaluate hash functions before comparing a pair of files. External hash functions require level 1 (higher levels are lowered automatically). A side effect of level 0 is to disable external hash functions.</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">Reporting</TH></TR>
+<TR><TH ALIGN="LEFT">-c</TH><TD>count file space savings per linked file.</TD></TR>
+<TR><TH ALIGN="LEFT">-h</TH><TD>shows this help and the long option names. [other option are ignored]</TD></TR>
+<TR><TH ALIGN="LEFT">-H</TH><TD>shows all identical files whether already linked or not. Use it with -n.</TD></TR>
+<TR><TH ALIGN="LEFT">-q</TH><TD>produces no output during the run (also toggles -c and -v to off)</TD></TR>
+<TR><TH ALIGN="LEFT">-v</TH><TD>display shell commands to perform linking [verbose].</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">Actions</TH></TR>
+<TR><TH ALIGN="LEFT">-l</TH><TD>only allow hardlinks. No symlinks are established.</TD></TR>
+<TR><TH ALIGN="LEFT">-n</TH><TD>do not really perform links [<B>n</B>o action].</TD></TR>
+<TR><TH ALIGN="LEFT">-s</TH><TD>generate symlinks although some given paths are relative.</TD></TR>
+<TR><TH ALIGN="LEFT">-w</TH><TD>only weak symbolic links allthough hardlinks might be possible.</TD></TR>
+<TR><TH ALIGN="LEFT">-T</TH><TD>when linking, keep the directories' modification and access time. </TD></TR>
+<TR><TH ALIGN="LEFT">-0</TH><TD>disable linking of empty files i.e. files of size 0.</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">Link Directions</TH></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-k &lt;key&gt;</TH><TD>Use key to define link direction, where <EM>key</EM> is one of ...<BR>
+	<EM>@</EM>&nbsp;&nbsp;link all identical files to the one which has already the most links.<BR>
+	<EM>#</EM>&nbsp;&nbsp;link all identical files to the first one that occured on commandline.<BR>
+	<EM>&lt;</EM>&nbsp;&nbsp;link all identical files to the oldest one in the set.<BR>
+	<EM>&gt;</EM>&nbsp;&nbsp;link all identical files to the newest one in the set.<BR>
+	<EM>-</EM>&nbsp;&nbsp;link all to the smallest one when using extra styles (like <EM>&lt;</EM> otherwise).<BR>
+	<EM>+</EM>&nbsp;&nbsp;link all to the biggest one when using extra styles (like <EM>&gt;</EM> otherwise).<BR>
+	<EM><EM>else</EM></EM>&nbsp;&nbsp;link identical files arbitrarily (to first in unsorted list).<BR>
+	You should pay attention on masking these characters like '#' or \#
+	</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+<TR><TD CLASS="feld"><TABLE ALIGN="LEFT" BGCOLOR="#CCCCFF">
+<TR><TD WIDTH="80"></TD><TH WIDTH="600" ALIGN="LEFT">General Behaviour</TH></TR>
+<TR><TH ALIGN="LEFT">-b &lt;path&gt;</TH><TD>set current working directory to the given path.</TD></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-e &lt;env&gt;</TH><TD>load an environment set, i.e. some stored default settings. If not present, it will be stored. Please note, that the environment setting are loaded at its position in the command line, but stored after all settings were performed. Only the directories from the command line will be stored.</TD></TR>
+<TR><TH ALIGN="LEFT">-i</TH><TD>decide in interactve mode what to do with identical files.</TD></TR>
+<TR><TH ALIGN="LEFT">-m &lt;bytes&gt;</TH><TD>only touch larger files. (deprecated: use -o <EM>-size +#c</EM>)</TD></TR>
+<TR><TH ALIGN="LEFT" VALIGN="TOP">-o &lt;opts&gt;</TH><TD>pass one option string to the initially called find command (last given string applies). If not given an interal function is called instead of find.</TD></TR>
+<TR><TH ALIGN="LEFT">&lt;tree&gt;</TH><TD>any directory tree to scan for duplicate files recursively.</TD></TR>
+</TABLE></TD></TR>
+<TR><TD>&nbsp;</TD></TR>
+
+</TD></TR>
+</TABLE>
+<P>
+</BODY>
+</HTML>

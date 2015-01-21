@@ -1,0 +1,245 @@
+<?XML version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<HTML lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <HEAD>
+    <TITLE>Freedup Examples</TITLE>
+    <META HTTP-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <META NAME="KEYWORDS" content="Freedup, systems management, tool, link, download" />
+    <META HTTP-EQUIV="expires" content="Tue, 30 Aug 2007 19:00:00 CET" />
+    <LINK REL="stylesheet" type="text/css" href="freedup.css" />
+</HEAD>
+<BODY BGCOLOR="#DDDDFF">
+<P>
+<H2> Examples </H2>
+<P>
+<H3> An Example using FREEDUP in native mode: </H3>
+<P>
+<PRE CLASS="cmd">
+SYSTEM1:root# freedup -cf /home/freedup/holidays/2006/family /home/freedup/holidays/2006/friends
+</PRE>
+Run through both trees <TT>.../family</TT> and <TT>.../friends</TT>, compare the files 
+(selections of my holiday snapshots) and link those files, that have identical names 
+and contents. The option <TT>-c</TT> counts how much space is saved by linking.
+<P>
+<H3> An Example to remove duplicate MP3 files: </H3>
+<P>
+MP3 files usually contain a tag (indeed there are two different tags that may coexist at the 
+beginning and at the end of the file) that contains more information than the pathname. MP3 files 
+are also copied frequently (for legal reasons) like having it on a MP3 CD for the car, on the stick
+that is used for jogging or for simple rearrangements from one computer to another. With each
+further action it starts getting more complicate to know, whether it is a old version or a new
+one in higher quality (hard disks are getting cheaper). In order to make the situation worse,
+I tend to correct wrong titles or misspelled Artist names. (Do you know how many 'r', 's', 't'
+and 'n's are in the artists name who sings "Ironic"?) 
+<P>
+I think the motivation should be clear by now. How looks the solution like? My solution is to use <TT>FreeDup</TT>
+and its extended style enhancements. Here is the syntax to find out, whether it is a good idea
+to link files and one should check it manually:
+<P>
+<PRE CLASS="cmd">
+MP3SYSTEM:root# freedup -inq -x mp3 /music /burn
+</PRE>
+<PRE CLASS="tiny">
+/music/Alanis_Morissette/Ironic.mp3
+/music/HiFi/Alanis_Morissette/Ironic.mp3
+/burn/CD/Females/Alanis_Morissette/Ironic.mp3
+/burn/CD/CarMix1/Alanis_Morissette/Ironic.mp3
+/burn/Stick/Blue/Alanis_Morissette/Ironic.mp3
+
+[...]
+</PRE>
+<P>
+Due to the amount of files to link I tend to link them automatically, by omitting <TT>-in</TT>
+or replacing it with <TT>-c</TT>. In case I want to to decide the linking direction case by case
+I only omit <TT>-n</TT>.
+<P>
+<PRE CLASS="cmd">
+MP3SYSTEM:root# freedup -i -x mp3 /music /burn
+</PRE>
+<PRE CLASS="tiny">
+Extra Style comparisons are not thouroughly tested yet.
+You may loose header information, if you press <return>.
+Use CTRL-C to stop.
+</PRE>
+I was used to use CTRL-D to bypass this message. But you should update to a new version.
+<PRE CLASS="tiny">
+4052 files to investigate
+
+Del:Lnk [filesize:devc:i-node:perm:L:tag] &lt;filename&gt;
+ 0 : A [    81920:0303:00a8c0:0644:1:  ] /music/Alanis_Morissette/Ironic.mp3
+ 1 : B [    86016:0303:00a8e7:0644:1: 2] /music/HiFi/Alanis_Morissette/Ironic.mp3
+ 2 : C [    86018:0303:00a8e0:0644:1: 2] /burn/CD/CarMix1/Alanis_Morissette/Ironic.mp3
+ 3 : D [    86144:0303:00a8bb:0644:1:12] /burn/CD/Females/Alanis_Morissette/Ironic.mp3
+ 4 : E [    86144:0303:00a8c1:0644:1:12] /burn/Stick/Blue/Alanis_Morissette/Ironic.mp3
+Delete on number, Link on letter, Symlink on Capital (first is source)
+<RETURN> to confirm. <ESC> to clear. All links will point to &lt;a&gt;.
+$ ln &lt;e&gt; &lt;b&gt;; ln &lt;e&gt; &lt;a&gt;; rm &lt;3&gt;; rm &lt;2&gt;;
+[...]
+</PRE>
+When I get the first selection I type 'e', 'b','a','3','2'. When I press return, the commands will be executed.
+It is easy to erase the command list by typing the escape key. If your decision rules are simple
+you may use '@','<','>' to link all other files to the first (from command line or standard input),
+to the oldest or the newest file. But I use CTRL-C to try different options.
+<P>
+<PRE CLASS="cmd">
+MP3SYSTEM:root# freedup -i /music /burn
+</PRE>
+<P>
+If I now start <TT>FreeDup</TT> without the extra style option, not all identical 
+mp3 codings would have been found, since most files differ (compare sizes).
+The resulting list is much shorter. Since they are all identical, the size
+and the tag info (<TT>FreeDup</TT> does not look for tags then) is not shown.
+<P>
+<PRE CLASS="tiny">
+4052 files to investigate
+
+Del:Lnk [dev:i-node:perm:L]
+ 0 : A [0303:00a8bb:0644:1] /burn/CD/Females/Alanis_Morissette/Ironic.mp3
+ 1 : B [0303:00a8c1:0644:1] /burn/Stick/Blue/Alanis_Morissette/Ironic.mp3
+Delete on number, Link on letter, Symlink on Capital (first is source)
+<RETURN> to confirm. <ESC> to clear. All links will point to &lt;a&gt;.
+$ ln &lt;b&gt; &lt;a&gt;;
+[...]
+</PRE>
+<P>
+<P>
+<H3> An Example using LOCATE: </H3>
+<P>
+The intention is to see, what <TT>FreeDup</TT> would do on all registered JPEGs on SYSTEM1.
+We do run the command as root, just to see all allowed links.
+<P>
+<PRE CLASS="cmd">
+SYSTEM1:root# locate '*.jpg' | freedup -nv
+</PRE>
+<PRE CLASS="tiny">
+lstat() failed while reading file statistics: No such file or directory
+lstat() failed while reading file statistics: No such file or directory
+...
+lstat() failed while reading file statistics: No such file or directory
+lstat() failed while reading file statistics: No such file or directory
+1085 files to investigate
+
+ln "/opt/kde3/share/apps/pixie/doc/en/pixielogo.jpg" "/opt/kde3/share/apps/pixie/pixielogo.jpg"
+ln "/opt/kde3/share/apps/quanta/templates/binaries/images/jpg/demo.jpg" "/opt/kde3/share/apps/quanta/templates/images/jpg/demo.jpg"
+ln "/usr/lib/webmin/mscstyle3/images/cats/net.jpg" "/usr/lib/webmin/mscstyle3/images/cats_over/net.jpg"
+ln "/usr/lib/webmin/mscstyle3/images/cats/webmin.jpg" "/usr/lib/webmin/mscstyle3/images/cats_over/webmin.jpg"
+ln "/usr/share/games/freedroid/graphics/transfer.jpg" "/usr/src/packages/BUILD/freedroid-0.8.4/graphics/transfer.jpg"
+ln "/usr/share/doc/packages/id3lib-devel/attilas_id3logo.jpg" "/usr/src/packages/BUILD/audacity-src-1.0.0/id3lib/doc/attilas_id3logo.jpg"
+ln "/usr/share/doc/packages/mgp/sample/mgp3.jpg" "/usr/X11R6/lib/X11/mgp/mgp3.jpg"
+ln "/usr/share/doc/packages/mgp/sample/mgp2.jpg" "/usr/X11R6/lib/X11/mgp/mgp2.jpg"
+ln "/usr/share/doc/packages/mgp/sample/mgp1.jpg" "/usr/X11R6/lib/X11/mgp/mgp1.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/caida_bw/1280.jpg" "/usr/X11R6/lib/X11/xglobe/caida_bw_1280.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/caida/1280.jpg" "/usr/X11R6/lib/X11/xglobe/caida_1280.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/alt/1200.jpg" "/usr/X11R6/lib/X11/xglobe/alt_1200.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/bio/1600.jpg" "/usr/X11R6/lib/X11/xglobe/bio_1600.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/depths/1440.jpg" "/usr/X11R6/lib/X11/xglobe/depths_1440.jpg"
+ln "/opt/kde3/share/apps/kworldclock/maps/mggd/1440.jpg" "/usr/X11R6/lib/X11/xglobe/mggd_1440.jpg"
+15 files of 1085 will be replaced by links.
+The total size of replacable files is 1506387 bytes.
+md5 hash algorithm had to read 86 files to avoid 31 file comparisons.
+</PRE>
+<P>
+Initially failed lstat() executions show, that the locate database was not updated since the last JPEG removals.
+The stats of 1085 files have been read and compared after that. 15 files turned out to match 15 others.
+Most of them seem having been transfered by install commands. The amount of saved space is about 1.5MB.
+Using the md5 hashing was not a good idea in this case. Instead of reading and evaluating a hash sum
+it would have been easier to read 62 files for direct comparison.
+<P>
+Please be aware, that the displayed commands cannot be piped into a file and executed later. You need to remove the target first or use <TT>ln -f</TT>, before you link it. Otherwise you will receive "file exists".
+Later versions of <TT>FreeDup</TT> show option <TT>-f</TT> by default.
+<P>
+<H3> An Example using FIND: </H3>
+<P>
+<PRE CLASS="cmd">
+SYSTEM1:root#  find /usr/src/linux -type f -xdev -atime +12 | freedup -nv
+SYSTEM1:/home/freedup # find /usr/src/linux -type f -xdev -atime +12 | freedup -c
+</PRE>
+<PRE CLASS="tiny">
+Taking file names from stdin
+
+0 files to investigate
+
+0 files of 0 replaced by links.
+The total size of replaced files was 0 bytes.
+md5 hash algorithm had to read 0 files to avoid 0 file comparisons.
+</PRE>
+The starting tree is not a tree but a symbolic link. You need to append a slash to descend into the referenced directory. This trick only works for the starting tree.
+<PRE CLASS="cmd">
+SYSTEM1:/home/freedup # find /usr/src/linux/ -type f -xdev -atime +12 | time freedup -c
+</PRE>
+<PRE CLASS="tiny">
+Taking file names from stdin
+
+1045 files to investigate
+
+0 files of 1045 replaced by links.
+The total size of replaced files was 0 bytes.
+md5 hash algorithm had to read 0 files to avoid 0 file comparisons.
+0.00user 0.01system 0:00.29elapsed 6%CPU (0avgtext+0avgdata 0maxresident)k
+0inputs+0outputs (0major+1310minor)pagefaults 0swaps
+</PRE>
+You see, that I tried <TT>FreeDup</TT> already before. No file that was not touched for 12 days did match another.
+<EM>-xdev</EM> was used to confine the find command to the local directory. The prefix command <EM>time</EM>
+was used to show some not very interesting performance statistics.
+Another way to write it down is
+<PRE CLASS="cmd">
+SYSTEM1:/home/freedup # freedup -c /usr/src/linux/ -o "-xdev -atime +12"
+</PRE>
+<P>
+The option passing really pays if you need to scan a number of trees. Just compare yourself:
+<PRE CLASS="cmd">
+SYSTEM1:/home/freedup # freedup -c /usr/src/linux-2.6.12.1 /usr/src/linux-2.6.21.1 -o "-xdev -atime +12"
+</PRE>
+versus
+<PRE CLASS="cmd">
+SYSTEM1:/home/freedup # ( find /usr/src/linux-2.6.12.1 -type f -xdev -atime +12 ; find /usr/src/linux-2.6.21.1 -type f -xdev -atime +12 ) | time freedup -c
+</PRE>
+Please note, that I omitted (incorrectly) the find default action <EM>-print</EM>.
+<P>
+<H3> List identical files in groups </H3>
+<P>
+<PRE CLASS="cmd">
+SYSTEM1:/home/freedup/fdupes-1.40 # freedup -in testdir/
+</PRE>
+<PRE CLASS="tiny">
+14 files to investigate
+
+testdir/two
+testdir/twice_one
+testdir/recursed_a/two
+
+testdir/recursed_a/one
+testdir/recursed_b/one
+
+testdir/recursed_b/three
+testdir/recursed_b/two_plus_one
+
+testdir/zero_a
+testdir/zero_b
+
+testdir/with spaces a
+testdir/with spaces b
+</PRE>
+<P>
+<H3> Directories to use <TT>FreeDup</TT> for: </H3>
+<P>
+<UL>
+<LI> Several versions of software contain identical files, e.g. linux kernel.
+<LI> The backup side or <A HREF="http://www.rsnapshot.org/">rsnapshot</A>. <TT>FreeDup</TT> speeds things up.
+<LI> You have multiple copies of the file COPYING in /usr/doc or /usr/share/DOC
+<LI> Depending on your system, the following might be good places<BR>
+  to try linking (size in parentheses are my SuSE 9.2 savings):
+<TABLE>
+  <TR><TD>freedup /usr/src/linux-2.6.10 /usr/src/linux-2.6.11 	</TD><TD>20/68329</TD><TD>(9k)</TD></TR>
+  <TR><TD>freedup /usr/src/linux-2.6.1*				</TD><TD>930/207000</TD><TD>(1.52MB)</TD></TR>
+  <TR><TD>freedup /usr/share					</TD><TD>37/163335</TD><TD>(2.6MB)</TD></TR>
+  <TR><TD>freedup /usr/lib					</TD><TD>22/41368</TD><TD>(97kB)</TD></TR>
+  <TR><TD>freedup /usr/src/packages/BUILD			</TD><TD>3030/108427</TD><TD>(17.5MB)</TD></TR>
+  <TR><TD>freedup /usr/man /usr/share/man			</TD><TD>14/10772</TD><TD>(19kB)</TD></TR>
+  <TR><TD>freedup /usr/share/locale /etc/locale			</TD><TD>36/1436 files</TD><TD>(29kB)</TD></TR>
+  <TR><TD><A HREF="http://blog.linuxinternet.org/category/mac/">Warwick Pooles Personal Files</A>		</TD><TD>26% space reduction</TD><TD></TD></TR>
+</TABLE>
+<LI> Directories holding multimedia files are good candidates.
+</UL>
+<P>
+</BODY>
