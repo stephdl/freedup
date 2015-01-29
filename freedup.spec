@@ -71,9 +71,11 @@ rm /etc/xinetd.d/freedup
 
 
 %changelog
-* Wed Jan 21 2015 stephane de labrusse <stephdl@de-labrusse.fr> 1.5-3.sme
+* Wed Jan 21 2015 stephane de labrusse <stephdl@de-labrusse.fr> 1.5.3-1.sme
 - First release to sme9
 
+* Thu Mar 06 2008 devel (AN) <AN@freedup.org>
+- Changes to version 1.5-3
   + gui defaults to off, activate and deactivate using "make webon/weboff/state"
 
 * Thu Mar 06 2008 devel (AN) <AN@freedup.org>
