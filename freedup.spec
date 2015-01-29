@@ -13,7 +13,7 @@ Group:			Applications/File
 Source:			http://%{name}.org/%{name}-%{real_version}-src.tar.bz2
 Vendor:			AN <AN@freedup.org>
 URL:			http://%{name}.org/
-BuildRoot:		/var/tmp/%{name}-%{version}-%{release}-buildroot
+BuildRoot:		/var/tmp/%{name}-%{real_version}-buildroot
 
 
 %description
