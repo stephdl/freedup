@@ -1,6 +1,7 @@
 %define name freedup
 %define version 1.5.3
 %define release 1
+%define real_version 1.5-3
 %define _binaries_in_noarch_packages_terminate_build   0
 Name:			%{name}
 Summary:		Links substantially identical, duplicate files to save file system space.
@@ -9,7 +10,7 @@ Release:		%{release}
 License:		GPL
 Packager:		AN <AN@freedup.org>
 Group:			Applications/File
-Source:			http://%{name}.org/%{name}-%{version}-%{release}-src.tar.bz2
+Source:			http://%{name}.org/%{name}-%{real_version}-src.tar.bz2
 Vendor:			AN <AN@freedup.org>
 URL:			http://%{name}.org/
 BuildRoot:		/var/tmp/%{name}-%{version}-%{release}-buildroot
