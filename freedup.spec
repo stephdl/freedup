@@ -6,7 +6,7 @@
 Name:			%{name}
 Summary:		Links substantially identical, duplicate files to save file system space.
 Version:		%{version}
-Release:		%{release}
+Release:		%{release}%{?dist}
 License:		GPL
 Packager:		AN <AN@freedup.org>
 Group:			Applications/File
