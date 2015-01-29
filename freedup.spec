@@ -1,5 +1,5 @@
 %define name freedup
-%define version 1.6
+%define version 1.5
 %define release 3 
 %define _binaries_in_noarch_packages_terminate_build   0
 Name:			%{name}
@@ -39,7 +39,6 @@ rm -rf ${RPM_BUILD_ROOT}
 	MANPAGEDIR=%{_mandir}
 	install -d $RPM_BUILD_ROOT/$INSTALLDIR
 	install -s -p -m 755 freedup $RPM_BUILD_ROOT/$INSTALLDIR/freedup
-	install -s -p -m 755 symharden $RPM_BUILD_ROOT/$INSTALLDIR/symharden
 	install -d $RPM_BUILD_ROOT/$MANPAGEDIR/man1
 	gzip -c freedup.1>freedup.1.gz
 	install -p -m 644 freedup.1.gz $RPM_BUILD_ROOT/$MANPAGEDIR/man1/freedup.1.gz
@@ -65,50 +64,15 @@ rm /etc/xinetd.d/freedup
 
 %files
 %defattr(-,root,root)
-%attr(755,root,root)		/usr/bin/symharden
 %attr(755,root,root)		/usr/bin/freedup
-%doc				{TODO,README,README.SHA,COPYING,COPYING.SHA,verify,ChangeLog,demo,html}
+%doc				{TODO,README,README.SHA,COPYING,verify,ChangeLog,demo,html}
 %{_mandir}/man1/freedup.1.gz
 
 
 %changelog
-* Wed Jan 21 2015 stephane de labrusse <stephdl@de-labrusse.fr> 1.6-3.sme
+* Wed Jan 21 2015 stephane de labrusse <stephdl@de-labrusse.fr> 1.5-3.sme
 - First release to sme9
 
-* Thu Feb 04 2011 devel (AN) <AN@freedup.org>
-- Bugfixes in version 1.6-2
-  + replaced softlink to symharden.c
-
-* Thu Jan 11 2011 devel (AN) <AN@freedup.org>
-- Changes to version 1.6-1
-  + signal handler catches CTRL-C to free duplicates discovered so far
-  + added if-defines to avoid double parsing of *.h files
-  + removed inline directive [due to compile errors by request of Andres Meyer]
-- Enhancement in version 1.6-1
-  + added listener interface
-  + added new platform makefile for Apple Mac Version 10.6.0 i386 [tested]
-  + catch filesystem errors (e.g. /sys) and print warnings instead of assertions
-  + added (sp)lint rule for linux
-  + added symharden tool to convert softlinks into hardlinks whereever possible
-- Bugfixes in version 1.6-1
-  + added missing #ifdef HASHSUM statements [notified by Linc Davis]
-  + using include of <sys/stat.h> instead of <linux/stat.h> [by Linc Davis]
-  + added fclose() to mp4.c and checking all fclose()/fseek() result codes
-  + linted mp3.c, mp4.c mpc.c, auto.c, ogg.c, jpg.c and my.c
-  + partially linted freedup.c (e.g. splint does not fail anymore)
-  + moved filesize variables in "extra" functions from size_t=int to ulong
-  + incorporated patch to avoid segfaults [by Charles Duppy]
-- Known Bug in 1.6-1
-  + Apple Mac version does not link different ownerships (yet reason unclear)
-
-* Thu Mar 06 2008 devel (AN) <AN@freedup.org>
-- Changes to unpublished version 1.5-4
-  + Corrected Copyright statements to comply with OSF (GPL) requirements
-- Enhancement in unpublished version 1.5-4
-  + minor corrections to man page
-
-* Thu Mar 06 2008 devel (AN) <AN@freedup.org>
-- Changes to version 1.5-3
   + gui defaults to off, activate and deactivate using "make webon/weboff/state"
 
 * Thu Mar 06 2008 devel (AN) <AN@freedup.org>
@@ -409,3 +373,4 @@ rm /etc/xinetd.d/freedup
 
 * Thu Aug 16 2007 devel (AN) <AN@freedup.org>
 - Initial Release
+
