@@ -1,6 +1,6 @@
 %define name freedup
-%define version 1.5
-%define release 3 
+%define version 1.5.3
+%define release 1
 %define _binaries_in_noarch_packages_terminate_build   0
 Name:			%{name}
 Summary:		Links substantially identical, duplicate files to save file system space.
