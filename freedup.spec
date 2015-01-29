@@ -30,7 +30,7 @@ a good target for deduplication.
 %prep
 rm -rf ${RPM_BUILD_ROOT}
 
-%setup
+%setup -n %{name}-1.5
 
 
 %install
